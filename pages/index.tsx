@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
+import Link from 'next/link'
 
 export async function getServerSideProps(context: any) {
   try {
@@ -51,6 +52,10 @@ export default function Home({
 
         <p className="description">
           Get started by editing <code>pages/index.js</code>
+        </p>
+
+        <p className="description">
+          Or comments: <Link href="/comments"><code>pages/comments.tsx</code></Link>
         </p>
 
         <div className="grid">
