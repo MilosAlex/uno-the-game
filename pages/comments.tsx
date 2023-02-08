@@ -1,5 +1,7 @@
+import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
 import clientPromise from "../lib/mongodb";
+import addComment from "./api/addComment";
 
 interface Comment {
   _id: string;
@@ -12,12 +14,33 @@ interface CommentsProps {
 }
 
 export default function Comments(props: CommentsProps) {
-    const [name, setName] = useState("");
-    const [value, setValue] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [name, setName] = useState("");
+  const [value, setValue] = useState("");
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const url = window.location.href.replace("comments", "api/addComment");
     e.preventDefault();
-    console.log({name, value});
+    console.log({ name, value });
+    console.log(url);
+    try {
+      let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          value,
+        }),
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+      });
+      response = await response.json();
+      router.reload();
+    } catch (errorMessage: any) {
+      console.log(errorMessage);
+    }
   };
 
   return (
@@ -33,8 +56,18 @@ export default function Comments(props: CommentsProps) {
       </div>
       <h2>Leave your comment right here:</h2>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="name"/>
-        <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="message"/>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="name"
+        />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="message"
+        />
         <button type="submit">Send</button>
       </form>
     </main>
