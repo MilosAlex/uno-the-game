@@ -81,12 +81,13 @@ export async function getServerSideProps() {
 
     const comments = await db.collection("comments").find({}).toArray();
 
-    console.log(comments);
-
     return {
       props: { comments: JSON.parse(JSON.stringify(comments)) },
     };
   } catch (e) {
     console.error(e);
+    return {
+        props: { comments: [] },
+      };
   }
 }

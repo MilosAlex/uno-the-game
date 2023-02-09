@@ -1,0 +1,36 @@
+.navbar {
+  display: flex;
+  width: 100%;
+  height: 50px;
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: calc(100% - 40px);
+    height: 50px;
+    background-color: #000;
+    top: 0;
+    left: 0;
+    padding: 0 20px;
+  }
+
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(192, 192, 192);
+  }
+
+  &__name {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgb(192, 192, 192);
+  }
+
+  &__status {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+}
