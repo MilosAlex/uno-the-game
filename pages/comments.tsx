@@ -39,7 +39,7 @@ export default function Comments(props: CommentsProps) {
       response = await response.json();
       router.reload();
     } catch (errorMessage: any) {
-      console.log(errorMessage);
+      console.error(errorMessage);
     }
   };
 
