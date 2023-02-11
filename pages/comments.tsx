@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
 import clientPromise from "../lib/mongodb";
@@ -15,20 +16,21 @@ interface CommentsProps {
 
 export default function Comments(props: CommentsProps) {
   const router = useRouter();
+  const { data: session } = useSession();
 
-  const [name, setName] = useState("");
   const [value, setValue] = useState("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    if (!session) return;
     const url = window.location.href.replace("comments", "api/addComment");
     e.preventDefault();
-    console.log({ name, value });
+    const username = session.user?.name;
     console.log(url);
     try {
       let response = await fetch(url, {
         method: "POST",
         body: JSON.stringify({
-          name,
+          name: username,
           value,
         }),
         headers: {
@@ -54,22 +56,22 @@ export default function Comments(props: CommentsProps) {
           </div>
         ))}
       </div>
-      <h2>Leave your comment right here:</h2>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="name"
-        />
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="message"
-        />
-        <button type="submit">Send</button>
-      </form>
+      {session ? (
+        <>
+          <h2>Leave your comment right here:</h2>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="message"
+            />
+            <button type="submit">Send</button>
+          </form>
+        </>
+      ) : (
+        <h2>Sign in to leave a comment!</h2>
+      )}
     </main>
   );
 }
@@ -87,7 +89,7 @@ export async function getServerSideProps() {
   } catch (e) {
     console.error(e);
     return {
-        props: { comments: [] },
-      };
+      props: { comments: [] },
+    };
   }
 }
