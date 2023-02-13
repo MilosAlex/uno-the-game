@@ -26,7 +26,7 @@ const GameRoom = (props: GameRoomProps) => {
 
   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    authEndpoint: `http://localhost:3000/api/pusher/auth`,
+    authEndpoint: `/api/pusher/auth`,
     auth: { params: { username } },
   });
 
