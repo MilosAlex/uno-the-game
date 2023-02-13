@@ -77,11 +77,11 @@ const GameRoom = (props: GameRoomProps) => {
   };
 
   return (
-    <main>
-      <h1>{props.room.name}</h1>
-      <h2>Players waiting in the room:</h2>
+    <main className="game-room">
+      <h1 className="game-room__title">{props.room.name}</h1>
+      <h2 className="game-room__subtitle">Players waiting in the room:</h2>
       {players.map((player: any) => (
-        <p key={player.id}>{player.name}</p>
+        <p className="game-room__name" key={player.id}>{player.name}</p>
       ))}
     </main>
   );

@@ -127,7 +127,8 @@ button {
     align-items: center;
     gap: 10px;
 
-    a, button {
+    a,
+    button {
       height: 30px;
       border-radius: 5px;
       width: 5rem;
@@ -170,6 +171,29 @@ button {
       margin-top: 4rem;
       gap: 1rem;
     }
+  }
+}
+
+.game-room {
+  &__title {
+    margin: 5rem 0 0 0;
+    line-height: 1.15;
+    font-size: 4rem;
+    text-align: center;
+  }
+
+  &__subtitle {
+    margin: 3rem 0 0 0;
+    line-height: 1.15;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  &__name {
+    margin: 1rem 0 0 0;
+    line-height: 1.15;
+    font-size: 1rem;
+    text-align: center;
   }
 }
 
