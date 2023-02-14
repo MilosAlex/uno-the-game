@@ -10,17 +10,17 @@ export default function NavBar(props: NavBarProps) {
   const router = useRouter();
   const { data: session } = useSession();
 
-  if (session) console.log(session);
+  if (session) console.log("session: ", session);
 
   const handleSignIn = () => {
     signIn();
-    const username = session?.user?.name ?? "John Doe";
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+    /*const username = session?.user?.name ?? "John Doe";
+     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
       cluster: "eu",
       // use jwts in prod
       authEndpoint: `api/pusher/auth`,
       auth: { params: { username: "test" } },
-    });
+    }); */
   };
 
   return (

@@ -18,8 +18,9 @@ interface GameRoomProps {
 }
 
 const GameRoom = (props: GameRoomProps) => {
-  const { data: session } = useSession();
+  const { data: session }: any = useSession();
   const username = session?.user?.name;
+  const user_id = session?.user?.id;
 
   //useState for players
   const [players, setPlayers] = useState([]);
@@ -27,7 +28,7 @@ const GameRoom = (props: GameRoomProps) => {
   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
     authEndpoint: `/api/pusher/auth`,
-    auth: { params: { username } },
+    auth: { params: { username, user_id } },
   });
 
   let channel: any;

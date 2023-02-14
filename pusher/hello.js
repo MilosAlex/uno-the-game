@@ -1,11 +1,11 @@
 const Pusher = require("pusher");
 
 const pusher = new Pusher({
-  appId: "1553447",
-  key: "a1ade43c26f8926836df",
-  secret: "ef8460912ba4f0a348dd",
-  cluster: "eu",
-  useTLS: true
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: process.env.PUSHER_CLUSTER,
+  useTLS: true,
 });
 
 pusher.trigger("presence-my-channel", "my-event", {

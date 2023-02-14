@@ -33,7 +33,7 @@ export const authOptions = {
                     });
 
                     if (mongoUser) {
-                        user = { id: mongoUser._id.toString(), name: mongoUser.username, email: "jsmith@example.com" }
+                        user = { id: mongoUser._id.toString(), name: mongoUser.username }
                     }
 
                 } catch (e) {
@@ -51,9 +51,26 @@ export const authOptions = {
 
                     // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
                 }
-            }
+            },
         })
-    ]
+    ],
+    callbacks: {
+        async jwt({ token, account, profile, user }) {
+            // Persist the OAuth access_token and or the user id to the token right after signin
+            if (user) {
+                token.id = user.id
+            }
+            return token
+        },
+        async session({ session, token, user }) {
+            // Send properties to the client, like an access_token and user id from a provider.
+            session.accessToken = token.accessToken
+            session.user.id = token.id
+
+            return session
+        }
+    }
+
 }
 
 export default NextAuth(authOptions)
