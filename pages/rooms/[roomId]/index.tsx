@@ -21,6 +21,7 @@ const GameRoom = (props: GameRoomProps) => {
   const { data: session }: any = useSession();
   const username = session?.user?.name;
   const user_id = session?.user?.id;
+  const channel_id = "presence-" + props.room._id.toString();
 
   //useState for players
   const [players, setPlayers] = useState([]);
@@ -34,7 +35,7 @@ const GameRoom = (props: GameRoomProps) => {
   let channel: any;
 
   useEffect(() => {
-    channel = pusher.subscribe("presence-my-channel");
+    channel = pusher.subscribe(channel_id);
 
     // when a new member successfully subscribes to the channel
     channel.bind("pusher:subscription_succeeded", (members: any) => {
@@ -61,7 +62,7 @@ const GameRoom = (props: GameRoomProps) => {
     });
 
     return () => {
-      pusher.unsubscribe("presence-my-channel");
+      pusher.unsubscribe(channel_id);
     };
   }, []);
 
