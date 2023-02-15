@@ -162,6 +162,44 @@ button {
       box-shadow: 0.5rem 0.5rem;
     }
 
+    &--locked {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      cursor: not-allowed;
+      
+      &:hover {
+        div, h3 {
+          //visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
+
+    &__title {
+      margin: unset;
+    }
+
+    &__lock {
+      height: 2rem;
+      width: 2rem;
+      opacity: 0;
+      transition: all 0.2s ease-in-out;
+    }
+    
+    &__warning {
+      text-align: center;
+      height: 2rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #000;
+      margin: unset;
+      opacity: 0;
+      transition: all 0.2s ease-in-out;
+    }
+
     &__container {
       display: flex;
       flex-direction: column;

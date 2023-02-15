@@ -1,7 +1,9 @@
 import { ObjectId } from "mongodb";
 import { GetServerSideProps } from "next";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import clientPromise from "../../lib/mongodb";
+import Lock from "../../icons/lock";
 
 interface Room {
   _id: ObjectId;
@@ -14,19 +16,39 @@ interface RoomListProps {
 }
 
 const RoomList = (props: RoomListProps) => {
+  const { data: session } = useSession();
   return (
     <main>
       <h1 className="room-list__title">Select a room</h1>
       <section className="room-list__room__container">
-        {props.rooms.map((room) => (
-          <Link
-            className="room-list__room"
-            href={`/rooms/${room._id.toString()}`}
-            key={room._id.toString()}
-          >
-            <h2 className="room-list__room__title">{room.name ?? room._id}</h2>
-          </Link>
-        ))}
+        {props.rooms.map((room) =>
+          session ? (
+            <Link
+              className="room-list__room"
+              href={`/rooms/${room._id.toString()}`}
+              key={room._id.toString()}
+            >
+              <h2 className="room-list__room__title">
+                {room.name ?? room._id}
+              </h2>
+            </Link>
+          ) : (
+            <article
+              className="room-list__room room-list__room--locked"
+              key={room._id.toString()}
+            >
+              <div className="room-list__room__lock">
+                <Lock />
+              </div>
+              <h2 className="room-list__room__title">
+                {room.name ?? room._id}
+              </h2>
+              <h3 className="room-list__room__warning">
+                You have to be logged in to join this room
+              </h3>
+            </article>
+          )
+        )}
       </section>
     </main>
   );
