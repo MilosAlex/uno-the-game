@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Script from "next/script";
 import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
@@ -18,6 +19,8 @@ interface GameRoomProps {
 }
 
 const GameRoom = (props: GameRoomProps) => {
+  const router = useRouter();
+
   const { data: session }: any = useSession();
   const username = session?.user?.name;
   const user_id = session?.user?.id;
@@ -35,6 +38,7 @@ const GameRoom = (props: GameRoomProps) => {
   let channel: any;
 
   useEffect(() => {
+    if (!session) router.replace("/");
     channel = pusher.subscribe(channel_id);
 
     // when a new member successfully subscribes to the channel
@@ -83,7 +87,9 @@ const GameRoom = (props: GameRoomProps) => {
       <h1 className="game-room__title">{props.room.name}</h1>
       <h2 className="game-room__subtitle">Players waiting in the room:</h2>
       {players.map((player: any) => (
-        <p className="game-room__name" key={player.id}>{player.name}</p>
+        <p className="game-room__name" key={player.id}>
+          {player.name}
+        </p>
       ))}
     </main>
   );
