@@ -51,7 +51,9 @@ export default function Register(props: RegisterProps) {
     <main className="register">
       <h1 className="register__title">Register</h1>
       <form className="register__form" onSubmit={(e) => handleSubmit(e)}>
-        <label htmlFor="username">Username</label>
+        <label className="register__label" htmlFor="username">
+          Username
+        </label>
         <input
           className="register__input"
           id="username"
@@ -60,7 +62,7 @@ export default function Register(props: RegisterProps) {
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Peti42"
         />
-        <label htmlFor="password">
+        <label className="register__label" htmlFor="password">
           Magic word (don't use passwords, I'm not encrypting)
         </label>
         <input
