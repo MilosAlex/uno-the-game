@@ -14,7 +14,7 @@ export default function Register(props: RegisterProps) {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     console.log(e, username, password);
-    
+
     const url = window.location.href.replace("register", "api/addUser");
     e.preventDefault();
     console.log({ username, password });
@@ -30,7 +30,7 @@ export default function Register(props: RegisterProps) {
           "Content-Type": "application/json",
         },
       });
-      
+
       response = await response;
       const getLoginStatus = await signIn("credentials", {
         redirect: false,
@@ -49,20 +49,31 @@ export default function Register(props: RegisterProps) {
 
   return (
     <main className="register">
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <h1 className="register__title">Register</h1>
+      <form className="register__form" onSubmit={(e) => handleSubmit(e)}>
+        <label htmlFor="username">Username</label>
         <input
+          className="register__input"
+          id="username"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="username"
+          placeholder="Peti42"
         />
+        <label htmlFor="password">
+          Magic word (don't use passwords, I'm not encrypting)
+        </label>
         <input
+          className="register__input"
           type="password"
+          id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Magic word (don't use passwords, I'm not encrypting)"
+          placeholder="asd123"
         />
-        <button type="submit">Send</button>
+        <button className="register__button" type="submit">
+          Send
+        </button>
       </form>
     </main>
   );
