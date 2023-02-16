@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 import clientPromise from "../../lib/mongodb";
 
 export default async (req: any, res: any) => {
