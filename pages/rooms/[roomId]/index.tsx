@@ -6,12 +6,20 @@ import { useRouter } from "next/router";
 import Script from "next/script";
 import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
+import Card from "../../../components/card";
 import clientPromise from "../../../lib/mongodb";
+
+interface Card {
+  color: string;
+  value: string;
+}
 
 interface Room {
   _id: ObjectId;
   hostId: ObjectId;
   name: string;
+  deck: Card[];
+  round: number;
 }
 
 interface GameRoomProps {
@@ -36,6 +44,31 @@ const GameRoom = (props: GameRoomProps) => {
   });
 
   let channel: any;
+
+  const handleStartGame = async () => {
+    const url = window.location.href.replace(
+      `rooms/${props.room._id.toString()}`,
+      "api/startGame"
+    );
+    try {
+      let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          hostId: user_id,
+          roomId: props.room._id.toString(),
+        }),
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+      });
+
+      response = await response;
+      console.log(response);
+    } catch (errorMessage: any) {
+      console.error(errorMessage);
+    }
+  };
 
   useEffect(() => {
     if (!session) router.replace("/");
@@ -90,6 +123,20 @@ const GameRoom = (props: GameRoomProps) => {
         <p className="game-room__name" key={player.id}>
           {player.name}
         </p>
+      ))}
+      {props.room.hostId.toString() === user_id && (
+        <section className="game-room__start">
+          <button className="game-room__start-button" onClick={handleStartGame}>
+            Start Game
+          </button>
+        </section>
+      )}
+      {props.room.deck?.map((card: Card, i) => (
+        <Card
+          key={card.value + card.color + i}
+          color={card.color}
+          value={card.value}
+        />
       ))}
     </main>
   );
