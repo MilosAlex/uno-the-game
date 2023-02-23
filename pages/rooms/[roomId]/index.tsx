@@ -101,6 +101,11 @@ const GameRoom = (props: GameRoomProps) => {
 
   useEffect(() => {
     if (!session) router.replace("/");
+
+    if (props.room.round !== -1) {
+      handleRoomQuery();
+    }
+
     channel = pusher.subscribe(channel_id);
 
     // when a new member successfully subscribes to the channel
@@ -132,9 +137,9 @@ const GameRoom = (props: GameRoomProps) => {
     };
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     console.log(players);
-  }, [players]);
+  }, [players]); */
 
   const membersToArray = (members: any) => {
     const membersArray = [];
@@ -176,14 +181,17 @@ const GameRoom = (props: GameRoomProps) => {
         </>
       ) : (
         <>
+          <h3 className="game-room__round">Round: {room?.round}</h3>
           <h2 className="game-room__subtitle">Your hand: </h2>
-          {room?.players[0].hand?.map((card: Card, i: number) => (
-            <Card
-              key={card.value + card.color + i}
-              color={card.color}
-              value={card.value}
-            />
-          ))}
+          <section className="game-room__hand">
+            {room?.players[0].hand?.map((card: Card, i: number) => (
+              <Card
+                key={card.value + card.color + i}
+                color={card.color}
+                value={card.value}
+              />
+            ))}
+          </section>
         </>
       )}
     </main>

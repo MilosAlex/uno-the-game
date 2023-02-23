@@ -33,17 +33,23 @@ export default async (req: any, res: any) => {
       .findOne({ _id: new ObjectId(roomId) });
 
     console.log(deck);
-    
+
     // set hand for each user
     const players = users.map((user: any) => {
       const hand = deck.splice(0, 7);
       return { ...user, hand };
     });
-    
+
     console.log(deck);
     console.log(players[0]);
-    
-    
+
+    //set starting card
+
+    let startingCard = deck.splice(0, 1)[0];
+    while (startingCard.value.length !== 1) {
+      deck.push(startingCard);
+      startingCard = deck.splice(0, 1)[0];
+    }
 
     //set users in db
     //set round to 0
@@ -52,7 +58,7 @@ export default async (req: any, res: any) => {
       .collection("rooms")
       .updateOne(
         { _id: new ObjectId(roomId) },
-        { $set: { round: 0, players, deck } }
+        { $set: { round: 0, players, deck, topCard: startingCard } }
       );
 
     /* if (!deck) {

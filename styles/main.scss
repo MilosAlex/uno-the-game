@@ -299,6 +299,13 @@ button {
     text-align: center;
   }
 
+  &__round {
+    margin: 0.5rem 0 0 0;
+    line-height: 1.15;
+    font-size: 1rem;
+    text-align: center;
+  }
+
   &__name {
     margin: 1rem 0 0 0;
     line-height: 1.15;
@@ -336,14 +343,30 @@ button {
       box-shadow: 0.5rem 0.5rem;
     }
   }
+  
+  &__hand {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 1rem;
+    width: calc(100% - 2.4rem);
+    background-color: rgb(221, 221, 221);
+    border: 1px solid #000;
+    border-radius: 0.5rem;
+    padding: 1rem 0.2rem;
+    color: rgb(150, 150, 150);
+    box-shadow: 0.5rem 0.5rem;
+  }
 }
 
 .card {
   height: 10rem;
   width: 6rem;
   border: solid 1px #000;
-  margin-bottom: 5rem;
-  margin-left: 5rem;
+  background-color: white;
   border-radius: 0.5rem;
   padding: 0.5rem;
 
