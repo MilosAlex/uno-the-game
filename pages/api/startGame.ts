@@ -60,6 +60,11 @@ export default async (req: any, res: any) => {
       return;
     } */
 
+    //update sockets
+    pusher.trigger(`presence-${roomId}`, "new-round", {
+      message: "0",
+    });
+
     res.json({});
   } catch (e) {
     console.error(e);

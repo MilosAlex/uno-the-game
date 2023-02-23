@@ -18,7 +18,7 @@ interface Room {
   _id: ObjectId;
   hostId: ObjectId;
   name: string;
-  deck: Card[];
+  deck?: Card[];
   round: number;
 }
 
@@ -35,7 +35,9 @@ const GameRoom = (props: GameRoomProps) => {
   const channel_id = "presence-" + props.room._id.toString();
 
   //useState for players
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<any[]>([]);
+
+  const [room, setRoom] = useState<any | null>(null);
 
   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
@@ -70,6 +72,33 @@ const GameRoom = (props: GameRoomProps) => {
     }
   };
 
+  const handleRoomQuery = async () => {
+    const url = window.location.href.replace(
+      `rooms/${props.room._id.toString()}`,
+      "api/getRoom"
+    );
+    try {
+      let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          userId: user_id,
+          roomId: props.room._id.toString(),
+        }),
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+      });
+
+      response = await response;
+      const data = await response.json();
+      console.log("room: ", data);
+      setRoom(data);
+    } catch (errorMessage: any) {
+      console.error(errorMessage);
+    }
+  };
+
   useEffect(() => {
     if (!session) router.replace("/");
     channel = pusher.subscribe(channel_id);
@@ -80,8 +109,8 @@ const GameRoom = (props: GameRoomProps) => {
       setPlayers(membersToArray(channel.members.members as any) as any);
     });
 
-    channel.bind("my-event", function (data: any) {
-      alert(JSON.stringify(data));
+    channel.bind("new-round", function (data: any) {
+      handleRoomQuery();
     });
 
     console.log(channel);
@@ -118,26 +147,45 @@ const GameRoom = (props: GameRoomProps) => {
   return (
     <main className="game-room">
       <h1 className="game-room__title">{props.room.name}</h1>
-      <h2 className="game-room__subtitle">Players waiting in the room:</h2>
-      {players.map((player: any) => (
-        <p className="game-room__name" key={player.id}>
-          {player.name}
-        </p>
-      ))}
-      {props.room.hostId.toString() === user_id && (
-        <section className="game-room__start">
-          <button className="game-room__start-button" onClick={handleStartGame}>
-            Start Game
-          </button>
-        </section>
+
+      {(room == null || room?.round == -1) && props.room.round == -1 ? (
+        <>
+          <h2 className="game-room__subtitle">Players waiting in the room:</h2>
+          {players.map((player: any) => (
+            <p className="game-room__name" key={player.id}>
+              {player.name}
+            </p>
+          ))}
+          {props.room.hostId.toString() === user_id && (
+            <section className="game-room__start">
+              <button
+                className="game-room__start-button"
+                onClick={handleStartGame}
+              >
+                Start Game
+              </button>
+            </section>
+          )}
+          {props.room.deck?.map((card: Card, i) => (
+            <Card
+              key={card.value + card.color + i}
+              color={card.color}
+              value={card.value}
+            />
+          ))}
+        </>
+      ) : (
+        <>
+          <h2 className="game-room__subtitle">Your hand: </h2>
+          {room?.players[0].hand?.map((card: Card, i: number) => (
+            <Card
+              key={card.value + card.color + i}
+              color={card.color}
+              value={card.value}
+            />
+          ))}
+        </>
       )}
-      {props.room.deck?.map((card: Card, i) => (
-        <Card
-          key={card.value + card.color + i}
-          color={card.color}
-          value={card.value}
-        />
-      ))}
     </main>
   );
 };
