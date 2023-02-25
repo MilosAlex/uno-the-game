@@ -5,6 +5,8 @@ import Skip from "../icons/Skip";
 interface CardProps {
   color: string;
   value: string;
+  clickable?: boolean;
+  onClickHandler?: () => void;
 }
 
 export default function Card(props: CardProps) {
@@ -61,7 +63,20 @@ export default function Card(props: CardProps) {
   }
 
   return (
-    <article className={`card ${colorClass}`}>
+    <article
+      className={`card ${colorClass} ${
+        props.clickable ? "card--clickable" : ""
+      }`}
+      onClick={() => {
+        if (
+          props.clickable &&
+          props.onClickHandler &&
+          typeof props.onClickHandler === "function"
+        ) {
+          props.onClickHandler;
+        }
+      }}
+    >
       <div className="card__content">
         <span className="card__number-top">{text}</span>
         <div className="card__ellipse">

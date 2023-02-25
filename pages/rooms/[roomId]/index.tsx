@@ -38,6 +38,8 @@ const GameRoom = (props: GameRoomProps) => {
   const [players, setPlayers] = useState<any[]>([]);
 
   const [room, setRoom] = useState<any | null>(null);
+  const [isActiveTurn, setIsActiveTurn] = useState<boolean>(false);
+  const [activePlayer, setActivePlayer] = useState<any>(null);
 
   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
@@ -58,6 +60,7 @@ const GameRoom = (props: GameRoomProps) => {
         body: JSON.stringify({
           hostId: user_id,
           roomId: props.room._id.toString(),
+          activePlayers: players,
         }),
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -93,10 +96,39 @@ const GameRoom = (props: GameRoomProps) => {
       response = await response;
       const data = await response.json();
       console.log("room: ", data);
+
       setRoom(data);
+      setIsActiveTurn(data.activePlayer === user_id);
+      setActivePlayer(
+        data.players.find((player: any) => player.id === data.activePlayer)
+      );
     } catch (errorMessage: any) {
       console.error(errorMessage);
     }
+  };
+
+  const handleCardClick = async (card: Card) => {
+    console.log(card);
+    /* const url = window.location.href.replace(
+      `rooms/${props.room._id.toString()}`,
+      "api/playCard"
+    );
+    try {
+      let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          userId: user_id,
+          roomId: props.room._id.toString(),
+          card,
+        }),
+        //MISSING HEADERS
+      });
+
+      response = await response;
+      console.log(response);
+    } catch (errorMessage: any) {
+      console.error(errorMessage);
+    } */
   };
 
   useEffect(() => {
@@ -118,7 +150,7 @@ const GameRoom = (props: GameRoomProps) => {
       handleRoomQuery();
     });
 
-    console.log(channel);
+    //console.log(channel);
 
     // when a new member joins the chat
     channel.bind("pusher:member_added", (member: any) => {
@@ -151,10 +183,9 @@ const GameRoom = (props: GameRoomProps) => {
 
   return (
     <main className="game-room">
-      <h1 className="game-room__title">{props.room.name}</h1>
-
       {(room == null || room?.round == -1) && props.room.round == -1 ? (
         <>
+          <h1 className="game-room__title">{props.room.name}</h1>
           <h2 className="game-room__subtitle">Players waiting in the room:</h2>
           {players.map((player: any) => (
             <p className="game-room__name" key={player.id}>
@@ -181,16 +212,60 @@ const GameRoom = (props: GameRoomProps) => {
         </>
       ) : (
         <>
-          <h3 className="game-room__round">Round: {room?.round}</h3>
-          <h2 className="game-room__subtitle">Your hand: </h2>
+          <section className="game-room__board">
+            <article className="game-room__board__stats">
+              <h3 className="game-room__round">Round: {room?.round}</h3>
+              <h3 className="game-room__round">Deck size: {room?.deckSize}</h3>
+              {isActiveTurn ? (
+                <>
+                  <h3 className="game-room__round">
+                    It's your turn, pick a card!
+                  </h3>
+                  <button className="game-room__draw-button">Draw a card</button>
+                </>
+              ) : (
+                <h3 className="game-room__round">
+                  It's {activePlayer?.name}'s turn!
+                </h3>
+              )}
+            </article>
+            <article className="game-room__board__top-card">
+              <h2 className="game-room__top-card__title">Top card</h2>
+              <Card color={room?.topCard.color} value={room?.topCard.value} />
+            </article>
+            <article className="game-room__board__players">
+              {room?.players.map((player: any) => (
+                <div
+                  className={
+                    room?.activePlayer === player.id
+                      ? "game-room__board__players__player"
+                      : "game-room__board__players__player game-room__board__players__player--active"
+                  }
+                  key={player.id}
+                >
+                  <h3 className="game-room__board__players__name">
+                    {player.name}
+                  </h3>
+                  <p className="game-room__board__players__hand-size">
+                    Hand size: {player.handSize}
+                  </p>
+                </div>
+              ))}
+            </article>
+          </section>
+          {/* <h2 className="game-room__subtitle">Your hand: </h2> */}
           <section className="game-room__hand">
-            {room?.players[0].hand?.map((card: Card, i: number) => (
-              <Card
-                key={card.value + card.color + i}
-                color={card.color}
-                value={card.value}
-              />
-            ))}
+            {room?.players
+              .find((player: any) => player.id == user_id)
+              ?.hand?.map((card: Card, i: number) => (
+                <Card
+                  key={card.value + card.color + i}
+                  color={card.color}
+                  value={card.value}
+                  clickable={isActiveTurn}
+                  onClickHandler={() => handleCardClick(card)}
+                />
+              ))}
           </section>
         </>
       )}

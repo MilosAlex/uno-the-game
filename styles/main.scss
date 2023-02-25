@@ -285,6 +285,11 @@ button {
 }
 
 .game-room {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   &__title {
     margin: 5rem 0 0 0;
     line-height: 1.15;
@@ -343,7 +348,27 @@ button {
       box-shadow: 0.5rem 0.5rem;
     }
   }
-  
+
+  &__draw-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10rem;
+    height: 2rem;
+    border-radius: 5px;
+    border: 1px solid #000;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    padding: unset;
+    background-color: white;
+
+    &:hover {
+      background-color: white;
+      color: #000;
+      box-shadow: 0.5rem 0.5rem;
+    }
+  }
+
   &__hand {
     display: flex;
     flex-direction: row;
@@ -359,6 +384,80 @@ button {
     padding: 1rem 0.2rem;
     color: rgb(150, 150, 150);
     box-shadow: 0.5rem 0.5rem;
+    max-width: 60rem;
+  }
+
+  &__board {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 1rem;
+    width: calc(100% - 2.4rem);
+    background-color: rgb(221, 221, 221);
+    border: 1px solid #000;
+    border-radius: 0.5rem;
+    padding: 1rem 0.2rem;
+    color: rgb(150, 150, 150);
+    box-shadow: 0.5rem 0.5rem;
+    max-width: 60rem;
+
+    &__stats,
+    &__top-card,
+    &__players {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      color: #000;
+      width: 30%;
+    }
+
+    &__stats {
+    }
+
+    &__top-card {
+      &__title {
+        margin: unset;
+      }
+    }
+
+    &__players {
+      &__name {
+        margin: 0 0 0.3rem 0;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #000;
+      }
+
+      &__hand-size {
+        margin: unset;
+        text-align: center;
+        font-size: 1rem;
+        color: #000;
+      }
+
+      &__player {
+        padding: 0.3rem 0.7rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgb(150, 150, 150);
+        background-color: white;
+        box-shadow: 0.5rem 0.5rem;
+        color: rgb(150, 150, 150);
+        //background-color: rgb(221, 221, 221);
+
+        &--active {
+          border: 1px solid #000;
+          border-radius: 0.5rem;
+          background-color: white;
+          box-shadow: 0.5rem 0.5rem;
+          color: #000;
+        }
+      }
+    }
   }
 }
 
@@ -615,6 +714,17 @@ button {
       height: 3rem;
       transform: translate(-50%, -50%);
       font-size: 2rem;
+    }
+  }
+
+  &--clickable {
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.03);
+      transition: all 0.2s ease-in-out;
+      color: #000;
+      box-shadow: 0.5rem 0.5rem;
     }
   }
 }

@@ -17,8 +17,16 @@ export default async (req: any, res: any) => {
     }
     res.json({
       ...room,
-      players: room.players.filter((player: any) => player.id === userId),
-      deck: undefined,
+      players: room.players.map((player: any) => {
+        if (player.id === userId) {
+          return { ...player, handSize: player.hand.length };
+        } else {
+          return { ...player, hand: [], handSize: player.hand.length };
+        }
+      }),
+      deck: [],
+      deckSize: room.deck.length,
+      activePlayer: room.players[room.round % room.players.length].id,
     });
   } catch (e) {
     console.error(e);

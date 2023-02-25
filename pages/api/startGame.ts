@@ -4,7 +4,7 @@ import { pusher } from "../../lib/pusher";
 
 export default async (req: any, res: any) => {
   try {
-    const { hostId, roomId } = req.body;
+    const { hostId, roomId, activePlayers } = req.body;
 
     if (!hostId) {
       res.status(400).json({ message: "Missing hostId" });
@@ -34,10 +34,13 @@ export default async (req: any, res: any) => {
 
     console.log(deck);
 
-    // set hand for each user
+    // set hand and name for each user
     const players = users.map((user: any) => {
       const hand = deck.splice(0, 7);
-      return { ...user, hand };
+      const name = activePlayers.find(
+        (player: any) => player.id === user.id
+      )?.name;
+      return { ...user, hand, name };
     });
 
     console.log(deck);
