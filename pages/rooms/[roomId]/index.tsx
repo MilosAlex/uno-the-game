@@ -202,13 +202,6 @@ const GameRoom = (props: GameRoomProps) => {
               </button>
             </section>
           )}
-          {props.room.deck?.map((card: Card, i) => (
-            <Card
-              key={card.value + card.color + i}
-              color={card.color}
-              value={card.value}
-            />
-          ))}
         </>
       ) : (
         <>
