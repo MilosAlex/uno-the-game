@@ -140,7 +140,7 @@ const GameRoom = (props: GameRoomProps) => {
   };
 
   const handleCardClick = async (card: Card) => {
-    console.log(card);
+    console.log(card, user_id);
     const url = window.location.href.replace(
       `rooms/${props.room._id.toString()}`,
       "api/playCard"
