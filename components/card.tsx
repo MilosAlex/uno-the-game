@@ -73,7 +73,7 @@ export default function Card(props: CardProps) {
           props.onClickHandler &&
           typeof props.onClickHandler === "function"
         ) {
-          props.onClickHandler;
+          props.onClickHandler();
         }
       }}
     >

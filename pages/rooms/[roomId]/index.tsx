@@ -107,9 +107,41 @@ const GameRoom = (props: GameRoomProps) => {
     }
   };
 
+  const handleDrawCard = async () => {
+    const url = window.location.href.replace(
+      `rooms/${props.room._id.toString()}`,
+      "api/drawCard"
+    );
+    try {
+      let response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          userId: user_id,
+          roomId: props.room._id.toString(),
+        }),
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+      });
+
+      response = await response;
+      const data = await response.json();
+      /* console.log("room: ", data);
+
+      setRoom(data);
+      setIsActiveTurn(data.activePlayer === user_id);
+      setActivePlayer(
+        data.players.find((player: any) => player.id === data.activePlayer)
+      ); */
+    } catch (errorMessage: any) {
+      console.error(errorMessage);
+    }
+  };
+
   const handleCardClick = async (card: Card) => {
     console.log(card);
-    /* const url = window.location.href.replace(
+    const url = window.location.href.replace(
       `rooms/${props.room._id.toString()}`,
       "api/playCard"
     );
@@ -121,14 +153,17 @@ const GameRoom = (props: GameRoomProps) => {
           roomId: props.room._id.toString(),
           card,
         }),
-        //MISSING HEADERS
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
       });
 
       response = await response;
-      console.log(response);
+      //console.log(response);
     } catch (errorMessage: any) {
       console.error(errorMessage);
-    } */
+    }
   };
 
   useEffect(() => {
@@ -214,7 +249,12 @@ const GameRoom = (props: GameRoomProps) => {
                   <h3 className="game-room__round">
                     It's your turn, pick a card!
                   </h3>
-                  <button className="game-room__draw-button">Draw a card</button>
+                  <button
+                    className="game-room__draw-button"
+                    onClick={handleDrawCard}
+                  >
+                    Draw a card
+                  </button>
                 </>
               ) : (
                 <h3 className="game-room__round">
