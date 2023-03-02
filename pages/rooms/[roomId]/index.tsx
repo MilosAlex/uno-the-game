@@ -127,6 +127,8 @@ const GameRoom = (props: GameRoomProps) => {
 
       response = await response;
       const data = await response.json();
+
+      handleRoomQuery();
       /* console.log("room: ", data);
 
       setRoom(data);
@@ -161,6 +163,8 @@ const GameRoom = (props: GameRoomProps) => {
 
       response = await response;
       //console.log(response);
+
+      handleRoomQuery();
     } catch (errorMessage: any) {
       console.error(errorMessage);
     }
@@ -285,6 +289,7 @@ const GameRoom = (props: GameRoomProps) => {
                 </div>
               ))}
             </article>
+            <button className="game-room__refetch-button">Refetch</button>
           </section>
           {/* <h2 className="game-room__subtitle">Your hand: </h2> */}
           <section className="game-room__hand">

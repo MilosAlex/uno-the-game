@@ -403,6 +403,7 @@ button {
     color: rgb(150, 150, 150);
     box-shadow: 0.5rem 0.5rem;
     max-width: 60rem;
+    position: relative;
 
     @media (max-width: 768px) {
       flex-direction: column;
@@ -466,6 +467,20 @@ button {
         }
       }
     }
+  }
+
+  &__refetch-button {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #000;
+    background-color: white;
+    //box-shadow: 0.5rem 0.5rem;
+    color: #000;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
   }
 }
 
