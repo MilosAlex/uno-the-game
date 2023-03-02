@@ -289,7 +289,7 @@ const GameRoom = (props: GameRoomProps) => {
                 </div>
               ))}
             </article>
-            <button className="game-room__refetch-button">Refetch</button>
+            <button className="game-room__refetch-button" onClick={handleRoomQuery}>Refetch</button>
           </section>
           {/* <h2 className="game-room__subtitle">Your hand: </h2> */}
           <section className="game-room__hand">
