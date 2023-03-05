@@ -17,6 +17,13 @@ export default async (req: any, res: any) => {
       return;
     }
 
+    const activePlayer = room.players[room.round % room.players.length].id;
+
+    if (activePlayer !== userId) {
+      res.status(400).json({ message: "Not your turn" });
+      return;
+    }
+
     const url = `/channels/presence-${roomId}/users`;
     const pusherRes = await pusher.get({ path: url });
 
