@@ -70,7 +70,7 @@ export default async (req: any, res: any) => {
     } */
 
     //update sockets
-    pusher.trigger(`presence-${roomId}`, "new-round", {
+    await pusher.trigger(`presence-${roomId}`, "new-round", {
       message: "0",
     });
 
